@@ -31,20 +31,28 @@ const Login = () => {
       setError("Invalid password");
       return;
     }
-    const res = await axios.post(
-      BASE_URL + "/auth/login",
-      { email, password },
-      { withCredentials: true }
-    );
-    if (!res.data) {
-      setError("Invalid credentials");
-      return;
+    try {
+      const res = await axios.post(
+        BASE_URL + "/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
+      if (!res.data) {
+        setError("Invalid credentials");
+        return;
+      }
+      // console.log(res.data)
+      dispatch(addUser(res.data));
+      toast.success("Login successful");
+      navigate("/home");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Error logging in");
     }
-    // console.log(res.data)
-    dispatch(addUser(res.data));
-    toast.success("Login successful");
-    navigate("/home");
-    setLoading(false);
+    finally {
+      setLoading(false);
+    }
   };
 
   const handleSignup = async () => {
@@ -90,7 +98,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
@@ -183,7 +190,13 @@ const Login = () => {
               className="w-full bg-gradient-to-r from-accent to-warning hover:from-warning hover:to-accent text-white font-semibold py-3 px-4 rounded-lg text-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
               onClick={isLoginForm ? handleSubmit : handleSignup}
             >
-              {loading ? <Loader2 className="animate-spin" /> : isLoginForm ? "Sign in" : "Signup "}
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : isLoginForm ? (
+                "Sign in"
+              ) : (
+                "Signup "
+              )}
             </button>
           </div>
 

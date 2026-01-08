@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../utils/constants";
 import { GraduationCap, BookOpen, Edit3 } from "lucide-react";
+import toast from "react-hot-toast";
+
 const ProfileCard = ({onEdit}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [profileData, setProfileData] = useState({});
@@ -18,6 +20,7 @@ const ProfileCard = ({onEdit}) => {
         // console.log(data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
+        toast.error(error?.response?.data?.message || "Error fetching profile data");
       }
     };
     const getCompletedOrders = async () => {
@@ -30,6 +33,7 @@ const ProfileCard = ({onEdit}) => {
         console.log(data);
       } catch (error) {
         console.error("Error fetching completed orders:", error);
+        toast.error(error?.response?.data?.message || "Error fetching completed orders");
       }
     };
     fetchProfileData();

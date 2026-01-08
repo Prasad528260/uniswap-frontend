@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/constants';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 const EditProfileCard = ({onCancel}) => {
   
   const [formData, setFormData] = useState({
@@ -74,6 +75,7 @@ const EditProfileCard = ({onCancel}) => {
         console.log(data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
+        toast.error(error?.response?.data?.message || "Error fetching profile data");
       }
     };
     fetchProfileData();

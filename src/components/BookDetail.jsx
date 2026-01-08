@@ -1,18 +1,28 @@
 import { BookOpen, Calendar, Package, User } from "lucide-react";
 import React from "react";
 import { useLocation } from "react-router";
-import axios from 'axios'
-import { BASE_URL } from "../utils/constants"
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import toast from "react-hot-toast";
 const BookDetail = () => {
   const location = useLocation();
   const { book } = location.state || {};
-    // console.log(book.bookImg);
+  // console.log(book.bookImg);
 
-    const makeOffer = async ()=>{
-      const res = await axios.post(BASE_URL + "/request/send/"+book._id,{},{withCredentials:true})
+  const makeOffer = async () => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/request/send/" + book._id,
+        {},
+        { withCredentials: true }
+      );
       console.log(res.data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Error making offer");
     }
-    
+  };
+
   const getConditionColor = (condition) => {
     switch (condition.toLowerCase()) {
       case "good":
@@ -75,7 +85,10 @@ const BookDetail = () => {
                     {book.title?.replace("-", " ")}
                   </h1>
                   <p className="text-2xl text-gray-300 font-light">
-                    by <span className="font-semibold text-gray-200">{book.author}</span>
+                    by{" "}
+                    <span className="font-semibold text-gray-200">
+                      {book.author}
+                    </span>
                   </p>
                 </div>
 
@@ -85,7 +98,9 @@ const BookDetail = () => {
                     <span className="text-6xl font-black bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
                       ₹{book.price}
                     </span>
-                    <span className="text-lg text-gray-400 line-through">₹{Math.round(book.price * 1.4)}</span>
+                    <span className="text-lg text-gray-400 line-through">
+                      ₹{Math.round(book.price * 1.4)}
+                    </span>
                   </div>
                   <div className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold text-lg shadow-lg">
                     {book.subject}
@@ -97,7 +112,11 @@ const BookDetail = () => {
                   <div className="px-4 py-2 bg-gradient-to-r from-gray-700 to-gray-600 text-blue-300 rounded-full border border-gray-600 font-medium text-base">
                     📚 {book.semester} semester
                   </div>
-                  <div className={`px-4 py-2 ${getConditionColor(book.condition)} rounded-full font-medium text-base shadow-md`}>
+                  <div
+                    className={`px-4 py-2 ${getConditionColor(
+                      book.condition
+                    )} rounded-full font-medium text-base shadow-md`}
+                  >
                     ✨ {book.condition}
                   </div>
                   <div className="px-4 py-2 bg-gradient-to-r from-gray-700 to-gray-600 text-gray-200 rounded-full border border-gray-600 font-medium text-base">
@@ -107,7 +126,7 @@ const BookDetail = () => {
               </div>
 
               {/* Enhanced Action Button */}
-              <button 
+              <button
                 className="w-full py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 hover:-translate-y-1"
                 onClick={makeOffer}
               >
@@ -132,7 +151,9 @@ const BookDetail = () => {
                     <User className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
-                    <span className="text-gray-400 text-sm font-medium">Author</span>
+                    <span className="text-gray-400 text-sm font-medium">
+                      Author
+                    </span>
                     <p className="font-semibold text-gray-100">{book.author}</p>
                   </div>
                 </div>
@@ -141,8 +162,12 @@ const BookDetail = () => {
                     <Calendar className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <span className="text-gray-400 text-sm font-medium">Semester</span>
-                    <p className="font-semibold text-gray-100">{book.semester}</p>
+                    <span className="text-gray-400 text-sm font-medium">
+                      Semester
+                    </span>
+                    <p className="font-semibold text-gray-100">
+                      {book.semester}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-gray-700/70 rounded-xl border border-gray-600/50 shadow-sm">
@@ -150,8 +175,12 @@ const BookDetail = () => {
                     <Package className="w-5 h-5 text-green-400" />
                   </div>
                   <div>
-                    <span className="text-gray-400 text-sm font-medium">Condition</span>
-                    <p className="font-semibold text-gray-100">{book.condition}</p>
+                    <span className="text-gray-400 text-sm font-medium">
+                      Condition
+                    </span>
+                    <p className="font-semibold text-gray-100">
+                      {book.condition}
+                    </p>
                   </div>
                 </div>
               </div>
